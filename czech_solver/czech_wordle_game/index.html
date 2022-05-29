@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<title>Hra Wordle v češtině - každý den slovo</title>
+<meta name="description" content="Uhodněte slovo. Máte šest pokusů. Každý den se hádá právě jedno slovo.">
+<meta name="author" content="Wendigo volně podle originálu od Joshe Wardla">
+<meta name="viewport" content="width=device-width">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Wordle v češtině">
+<meta name="twitter:description" content="Uhodněte slovo. Máte šest pokusů. Každý den se hádá právě jedno.">
+<meta name="twitter:image" content="https://www.wordle.cz/wordle.cesky.png">
+<meta name="twitter:creator" content="@vvend"/>
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Wordle v češtině">
+<meta property="og:description" content="Uhodněte slovo. Máte šest pokusů. Každý den se hádá právě jedno.">
+<meta property="og:image" content="https://www.wordle.cz/wordle.cz.png">
+<meta property="og:url" content="https://www.wordle.cz/">
+
+<link rel="alternate" title="Wordle.cz - novinky" href="./rss/" type="application/rss+xml">
+
+<script src="wordle.js?v=51" type="text/javascript"></script>
+<link rel="stylesheet" href="style.css?v=51" media="screen">
+</head>
+<body class="center">
+<h1>WORDLE</h1>
+<div id="jak-hrat" class="infotab">
+<h2>Pravidla</h2>
+<p>
+Hádáte slovo pět znaků dlouhé. Např. <b>SOSÁK</b>, <b>RYTÍŘ</b>, <b>OCHOZ</b> apod.
+</p>
+<p>
+Postupně zkoušíte zadat své tipy.<br>
+Musí to být vždy <b>podstatné jméno</b> (které hra zná) dlouhé 5 písmen.<br>
+Potvrdíte jej klávesou <b>Enter</b> (<b>⏎</b>) a hra zadané slovo označí:
+</p>
+<p class="navod-start">
+Pokud písmena v hledaném slově <b>nejsou</b>:<br>
+<img src="img/wordle-priklad1.png" width="155" height="33" alt="Wordle - příklad 1">
+</p>
+<p class="navod">
+Písmena obsažená v hledaném slově, ale ležící <b>na nesprávné pozici</b>:<br>
+<img src="img/wordle-priklad2.png" width="155" height="45" alt="Wordle - příklad 2">
+</p>
+<p class="navod">
+Písmeno ležící <b>na správné pozici</b>:<br>
+<img src="img/wordle-priklad3.png" width="155" height="45" alt="Wordle - příklad 3">
+</p>
+<p class="navod">
+Máte 6 pokusů.<br>
+<img src="img/wordle-priklad4.png" width="155" height="45" alt="Wordle - příklad 4">
+</p>
+<p>
+Autorem <a href="https://www.powerlanguage.co.uk/wordle/">původní hry</a> v angličtině je Josh&nbsp;Wardle.
+</p>
+<p>
+<button onclick="toggleHelp()">hrát</button>
+</p>
+</div>
+<div id="hra">
+
+<table class="board">
+<tr id="r0"><td id="c00"></td><td id="c01"></td><td id="c02"></td><td id="c03"></td><td id="c04"></td></tr>
+<tr id="r1"><td id="c10"></td><td id="c11"></td><td id="c12"></td><td id="c13"></td><td id="c14"></td></tr>
+<tr id="r2"><td id="c20"></td><td id="c21"></td><td id="c22"></td><td id="c23"></td><td id="c24"></td></tr>
+<tr id="r3"><td id="c30"></td><td id="c31"></td><td id="c32"></td><td id="c33"></td><td id="c34"></td></tr>
+<tr id="r4"><td id="c40"></td><td id="c41"></td><td id="c42"></td><td id="c43"></td><td id="c44"></td></tr>
+<tr id="r5"><td id="c50"></td><td id="c51"></td><td id="c52"></td><td id="c53"></td><td id="c54"></td></tr>
+</table>
+<div id="klavesnice"><button onclick="toggleHelp()" title="jak hrát"><b>?</b></button></div>
+</div>
+<div id="vitezstvi" class="infotab">
+ <h2 id="grats">Gratuluji!</h2>
+ <p>Pro sdílení můžete <button onclick="copyTA(this, 'sdilet')">zkopírovat</button>:</p>
+ <textarea id="sdilet" cols="16" rows="9"></textarea>
+ <p>Vaše skóre za posledních 7 dní:</p>
+ <textarea id="graf" cols="17" rows="8"></textarea><br>
+ <button onclick="copyTA(this, 'graf')">kopírovat graf</button>
+ <p>Jak si stojíte ve <a href="./?stats">srovnání s průměrem</a>?</p>
+ <p>Nové slovo budeme hádat zase od<br>
+    23. 5. 06:16:25.</p>
+ <button onclick="closeVictory()">zavřít</button>
+</div>
+<script type="text/javascript">
+
+if (localStorage.getItem('wordle.seenHelp')) {
+    toggleHelp();
+} else {
+    localStorage.setItem('wordle.seenHelp', 'jo');
+}
+
+// init("kokot", 134, 40180, true);
+// init("laska", 134, 40180, true);
+// init("kokot", 0, 0, true);
+initModified(40180);
+
+</script>
+</body>
+</html>

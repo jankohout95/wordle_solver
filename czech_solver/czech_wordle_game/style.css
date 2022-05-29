@@ -1,0 +1,186 @@
+body {
+ font-family: sans-serif;
+ margin: 0;
+ padding: 0;
+ text-align: center;
+ background-color: white;
+}
+
+@media only screen and (min-width: 30em) {
+body {
+ margin: 0 auto;
+ max-width: 25em;
+}
+}
+
+h1 {
+ margin: 0.2em 0 0;
+}
+h2 {
+ margin: 0.2em 0 0;
+}
+
+
+@media only screen and (max-height: 33em) {
+h1 {
+ font-size: 1em;
+}
+}
+
+.bg-warn {
+ background-color: #ffe0e0;
+}
+
+.infotab {
+ border-radius: 0.5em;
+ padding: 0.5em 2em;
+ background-color: white;
+ box-shadow: 0.1em 0.1em 0.3em black;
+ margin: 0 0.2em 0.3em;
+}
+
+.infotab p {
+ margin: 0.5em 0;
+}
+
+.infotab table {
+ margin:0 auto 1em;
+}
+.infotab td, th {
+ padding: 0.1em 0.4em;
+ text-align: left;
+}
+
+.navod-start {
+ margin-bottom: 0;
+}
+.navod {
+ margin-top: 0;
+ margin-bottom: 0;
+}
+
+#hra {
+ display: none;
+}
+
+#vitezstvi {
+ display: none;
+}
+
+
+.board {
+ text-transform: uppercase;
+ margin: 0 auto;
+ border-spacing: 0.14em;
+ border-collapse: separate;
+ font-weight: bold;
+ font-size: 2em;
+}
+
+.board td {
+ width:2em;
+ height:2em;
+ border: 0;
+ text-align: center;
+ box-shadow: inset 0 0 0.3em rgba(0, 0, 200, .2);
+}
+
+@media only screen and (max-height: 39em) {
+
+.board {
+ font-size: 1.85em;
+ border-spacing: 0.1em;
+}
+
+.board td {
+ width:1.85em;
+ height:1.85em;
+}
+
+}
+
+@media only screen and (max-height: 32em) {
+
+.board {
+ font-size: 1.6em;
+ border-spacing: 0.05em;
+}
+
+.board td {
+ width:1.6em;
+ height:1.6em;
+}
+
+}
+
+@media only screen and (max-height: 26em) {
+
+.board {
+ font-size: 1em;
+ border-spacing: 0.05em;
+}
+
+.board td {
+ width:1em;
+ height:1em;
+}
+
+}
+
+
+.row-warn td {
+ background-color: #ffa0a0 !important;
+}
+
+.p-present {
+ color: white !important;
+ background-color: #ee734e !important;
+}
+
+.p-placed {
+ color: white !important;
+ background-color: #37cd4f !important;
+}
+
+.p-absent {
+ color: white !important;
+ background-color: #b0b0b0 !important;
+}
+
+
+#klavesnice {
+ margin: 0.5em 0 0 0;
+}
+
+#klavesnice button {
+ text-transform: uppercase;
+ text-align: center;
+ border-radius: 0.2em;
+ font-size: 1.4em;
+ padding: 0 !important;
+ margin: 0.1em;
+ width: 1.5em;
+ height: 1.5em;
+ touch-action: manipulation;
+ background-color: #f4f4f4;
+ -webkit-appearance: none;
+ appearance: none;
+}
+
+#klavesnice .spec_key {
+ margin-left:0.4em;
+ width: 1.9em;
+}
+
+
+.cursor {
+ animation-name: cursorblink;
+ animation-duration: 1s;
+ animation-iteration-count: infinite;
+}
+
+@keyframes cursorblink {
+ 0% {  background-color: #ffffff;}
+ 50% { background-color: #f0f0ff;};
+ 100 { background-color: #ffffff;}
+}

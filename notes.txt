@@ -1,0 +1,1 @@
+['pepka', 'petka', 'cetka', 'tecka', 'tetka', 'cejka', 'kecka', 'pecka']
