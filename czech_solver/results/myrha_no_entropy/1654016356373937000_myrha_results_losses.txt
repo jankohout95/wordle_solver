@@ -1,0 +1,16 @@
+uboci
+[00000,10001,00210,20212,20212,20212,]
+[myrha,cecko,lvoun,udobi,udobi,udobi,]
+---------------------------
+dedic
+[00000,12000,02000,22000,02021,02021,]
+[myrha,cecko,selen,debut,jezid,jezid,]
+---------------------------
+jupka
+[00002,00022,00022,00022,00022,00022,]
+[myrha,delka,sinka,tatka,vazka,kobka,]
+---------------------------
+vazac
+[00001,10020,00120,20020,20020,22220,]
+[myrha,asiat,puvab,vojak,vegan,vazal,]
+---------------------------

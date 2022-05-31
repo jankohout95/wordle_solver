@@ -2,6 +2,9 @@ import websockets
 import asyncio
 import time
 import json
+from time import sleep
+
+from perform_opener_entropies import getWordWithHighestEntropy
 
 NO_CONTAIN = "0"
 PRESENT = "1"
@@ -20,13 +23,25 @@ words_list = []
 
 resultWord = ""
 
+start_timestamp = ""
+
 game_counter = 0
 loss_counter = 0
+victory_counter = 0
 
 opening_word = "agama" #less entropy
-# opening_word = "akter" #most entropy
 
-file_for_loss_counter = opening_word + "_loss_counter.txt"
+# opening_word = "rakos"
+# opening_word = "daman"
+# opening_word = "bingo"
+# opening_word = "myrha"
+# opening_word = "kokta"
+# opening_word = "sifra"
+# opening_word = "kryti"
+# opening_word = "vklad"
+# opening_word = "cinka"
+# opening_word = "lezak"
+# opening_word = "akter" #most entropy
 
 def convertStringIntoArray(stringToConvert):
     for i in range(len(stringToConvert)):
@@ -35,9 +50,13 @@ def convertStringIntoArray(stringToConvert):
 
 def getNextGuess():
     nxGL = findWordByPatternNew()
-    nextGuess = nxGL[0]
+    # nextGuess = nxGL
+    # TODO get word with the highest entropy
+    nextGuess = getWordWithHighestEntropy(nxGL)
+    nextGuess = nextGuess[0]
     print(nextGuess)
     passedGuessList.append(nextGuess)
+    # sleep(5)
     return nextGuess
 
 def findWordByPatternNew():
@@ -94,10 +113,42 @@ def checkForDoubleLetter(word):
                 return True
     return False
 
+def writeResults(resultsFileName, counterFileName, counter):
+    results = open(resultsFileName, 'a')
+    results.write(resultWord)
+    results.write("\n")
+    results.write("[")
+    for patternItem in patternList:
+        results.write(patternItem + ",")
+    results.write("]")
+    results.write("\n")
+    results.write("[")
+    for passedGuessItem in passedGuessList:
+        results.write(passedGuessItem + ",")
+    results.write("]")
+    results.write("\n---------------------------\n")
+    results.close()
+
+    writeCounter(counterFileName, counter)
+
+def writeCounter(counterFileName, counter):
+    counter_file = open(counterFileName, 'w')
+    counter_file.write(str(counter))
+    counter_file.close()
+
+
+
+
+
 # create handler for each connection
 # when there is a connection to the websocket server, the handler function will be invoked.
 # You can receive data from the client websocket and send data back to the client in this function.
 async def websocket_request_handler(websocket, path):
+    global resultWord
+    global potential_word
+    global opening_word
+    global victory_counter
+
     # receive the client websocket send data.
     client_data = await websocket.recv()
     print(time.ctime() + '\n' + client_data + '\r')
@@ -105,12 +156,10 @@ async def websocket_request_handler(websocket, path):
     response_data = ""
     if client_data_json["state"] == "init":
         global game_counter
-        if game_counter == 100:
+        print("game_counter: " + str(game_counter))
+        if game_counter == 1000:
             exit(0)
         print("**********************************************************************")
-        global resultWord
-        global potential_word
-        global opening_word
         resultWord = client_data_json["content"]
         passedGuessList.clear()
         patternList.clear()
@@ -118,18 +167,23 @@ async def websocket_request_handler(websocket, path):
         potential_word = [None] * 10
         response_data = opening_word
         passedGuessList.append(response_data)
+        writeCounter(str(start_timestamp) + "_" + opening_word + "_game_counter.txt", game_counter)
         game_counter += 1
     elif client_data_json["state"] == "pattern":
         patternList.append(client_data_json["content"])
         response_data = getNextGuess()
+        if response_data == resultWord:
+            victory_counter += 1
+            writeResults(str(start_timestamp) + "_" + opening_word + "_results_victory.txt", str(start_timestamp) + "_" + opening_word + "_victory_counter.txt", victory_counter)
+
     elif client_data_json["state"] == "loss":
         global loss_counter
         patternList.append(client_data_json["content"])
         g_list.clear()
+
         loss_counter += 1
-        loss_counter_file = open(file_for_loss_counter, 'w')
-        loss_counter_file.write(str(loss_counter))
-        loss_counter_file.close()
+        writeResults(str(start_timestamp) + "_" + opening_word + "_results_losses.txt", str(start_timestamp) + "_" + opening_word + "_loss_counter.txt", loss_counter)
+
     elif client_data_json["state"] == "victory":
         patternList.append(client_data_json["content"])
         g_list.clear()
@@ -153,6 +207,7 @@ def start_websocket_server(host, port_number):
 
 
 if __name__ == "__main__":
+        start_timestamp = time.time_ns()
         convertStringIntoArray(all_possible_words)
 
         host = "localhost"

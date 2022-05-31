@@ -1,1 +1,7 @@
-['pepka', 'petka', 'cetka', 'tecka', 'tetka', 'cejka', 'kecka', 'pecka']
+
+
+Entropie je jedním ze základních a nejdůležitějších pojmů ve fyzice, teorii pravděpodobnosti a teorii informace, matematice a mnoha dalších oblastech vědy teoretické i aplikované. Vyskytuje se všude tam, kde se pracuje s pravděpodobností možných stavů daného systému.
+
+V populárních výkladech se často vyskytuje přiblížení entropie jako veličiny udávající „míru neuspořádanosti“ zkoumaného systému. Problémem tohoto vysvětlení je, že tato „definice“ používá pojem „neuspořádanost“, který je však sám nedefinovaný. Vhodnější je intuitivní představa entropie jako míry neurčitosti systému. Zatímco „ostrá“ rozdělení pravděpodobnosti (jako například prahování) mají entropii nízkou, naopak „neostrá“ či „rozmazaná“ rozdělení pravděpodobnosti mají entropii vysokou. Za pravděpodobnostní rozložení s nejvyšší entropií lze považovat normální (pro danou střední hodnotu a směrodatnou odchylku) nebo rovnoměrné (pro daný interval) rozložení.
+
+Původ slova „entropie“ je odvozen z řeckého εντροπία, "směrem k", (εν- "k" + τροπή "směrem").

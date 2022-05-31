@@ -185,6 +185,31 @@ def performOpenerEntropies(words_list):
 
     return word_data_dict
 
+def getWordWithHighestEntropy(word_list):
+    words_data_dict = performOpenerEntropies(word_list)
+    presorted_dict_of_words = {}
+    for word_data_index in words_data_dict:
+        word_data = words_data_dict[word_data_index]
+        presorted_dict_of_words[word_data_index] = word_data["entropy_suma"]
+    print(presorted_dict_of_words)
+    max_word = ""
+    max_entropy = -1
+
+    min_word = ""
+    min_entropy = 10
+
+    for presorted_word_index in presorted_dict_of_words:
+        if presorted_dict_of_words[presorted_word_index] > max_entropy:
+            max_entropy = presorted_dict_of_words[presorted_word_index]
+            max_word = presorted_word_index
+        # if presorted_dict_of_words[presorted_word_index] < min_entropy:
+        #     min_entropy = presorted_dict_of_words[presorted_word_index]
+        #     min_word = presorted_word_index
+    print("Word with max entropy: " + max_word + " -> " + str(max_entropy))
+    # print("Word with min entropy: " + min_word + " -> " + str(min_entropy))
+    return [max_word, max_entropy]
+
+
 if __name__ == "__main__":
         presorted_list_of_words = {}
         words_list = convertStringIntoArray(all_possible_words)
@@ -209,6 +234,30 @@ if __name__ == "__main__":
             if presorted_list_of_words[presorted_word_index] < min_entropy:
                 min_entropy = presorted_list_of_words[presorted_word_index]
                 min_word = presorted_word_index
+
+        min_entr = 10
+        min_entr_word = ""
+        sorted_list_of_words = {}
+        for i in range(len(presorted_list_of_words)):
+            for presorted_word_index in presorted_list_of_words:
+                if presorted_list_of_words[presorted_word_index] < min_entr:
+                    min_entr = presorted_list_of_words[presorted_word_index]
+                    min_entr_word = presorted_word_index
+            sorted_list_of_words[min_entr_word] = min_entr
+            presorted_list_of_words[min_entr_word] = 10
+            min_entr = 10
+
+        file = open("openers_entropies.txt", "w")
+        file_entr = open("only_entropies.txt", "w")
+        counter = 0
+        for word in sorted_list_of_words:
+            print(word + ": " + str(sorted_list_of_words[word]))
+            file.write(str(counter) + "," + word + "," + str(sorted_list_of_words[word]) + "\n")
+            file_entr.write(str(sorted_list_of_words[word]) + "\n")
+            counter += 1
+        file.close()
+        file_entr.close()
+
         print("Word with max entropy: " + max_word + " -> " + str(max_entropy))
         print("Word with min entropy: " + min_word + " -> " + str(min_entropy))
 

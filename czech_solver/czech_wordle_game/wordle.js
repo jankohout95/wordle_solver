@@ -11,6 +11,10 @@ var logIt = true;
 var wordPattern = "";
 var animationDelay = 0;
 
+var waitForAnswer = false;
+var waitForAnswerPeriodicTime = 30; //ms
+
+// var socket;
 
 const INIT_STATE = "init";
 const PATTERN_STATE = "pattern";
@@ -63,7 +67,7 @@ async function initModified(tn) {
     word = pickupRandomWord();
     // word = "horka";
     sendViaWebsocket(INIT_STATE, word);
-    console.log(word)
+    console.log(word);
     no = parseInt(localStorage.getItem('wordle.no')) + 1;
     // process word
     for (var i = 0; i < word.length; ++i) {
@@ -109,10 +113,18 @@ async function initModified(tn) {
     setTimeout(checkNewWord, 5 * 60 * 1000);
     let counter = 0;
     while (true) {
-        if (counter < 3) {
-            await sleep(200);
-            await sendViaWebsocket(PATTERN_STATE, wordPattern);
-            wordPattern = "";
+        if (counter < 10) {
+            if (wordPattern === "" || waitForAnswer) {
+                await sleep(waitForAnswerPeriodicTime);
+                console.log("waitForAnswer: " + waitForAnswer);
+            } else {
+                await sendViaWebsocket(PATTERN_STATE, wordPattern).then((message) => {
+                    console.log("Code here: " + message);
+                }).catch((error) => {
+                    console.log("Code here: " + error);
+                });
+                wordPattern = "";
+            }
             // counter++;
         } else {
             break;
@@ -438,6 +450,9 @@ function victory() {
     // graf
     gEl('graf').innerHTML = makeGraph(7);
     // sleep(1000);
+    while(waitForAnswer) {
+        sleep(waitForAnswerPeriodicTime);
+    }
     location.reload();
 }
 
@@ -559,47 +574,51 @@ function composeWSMessage(state, content) {
     return "{\"state\":\"" + state + "\",\"content\":\"" + content + "\"}"
 }
 
-function initWebSocket() {
-
-}
-
-
 function sendViaWebsocket(state, content) {
-    let socket = new WebSocket("ws://localhost:9999");
+    return new Promise((resolve, reject) => {
+        let socket = new WebSocket("ws://localhost:9999");
+        socket.onopen = function(e) {
+          console.info("WSS connection established.");
+          console.log("Sending data to server.");
+          socket.send(composeWSMessage(state, content));
+          waitForAnswer = true;
+          reject("Opened");
+        };
 
-    socket.onopen = function(e) {
-      // alert("[open] Connection established");
-      // alert("Sending to server");
-      console.info("WSS connection established.");
-      console.log("Sending data to server.");
-      socket.send(composeWSMessage(state, content));
-    };
+        socket.onmessage = function (event) {
+            console.log(`[message] Data received from server: ${event.data}`);
+            insertWordIntoRowAndValidate(event.data);
+            console.log(board);
+            console.log(localStorage.getItem('wordle.score'));
+            console.log(wordPattern);
+            waitForAnswer = true;
+            reject("data sent");
+        };
 
-    socket.onmessage = async function (event) {
-        // alert(`[message] Data received from server: ${event.data}`);
-        console.log(`[message] Data received from server: ${event.data}`);
-        insertWordIntoRowAndValidate(event.data);
-        console.log(board);
-        console.log(localStorage.getItem('wordle.score'));
-        console.log(wordPattern);
-    };
+        socket.onclose = function(event) {
+          if (event.wasClean) {
+            // alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            resolve("Success");
+            waitForAnswer = false;
+          } else {
+            // e.g. server process killed or network down
+            // event.code is usually 1006 in this case
+            // alert('[close] Connection died');
+            console.log("[close] Connection died");
+            waitForAnswer = false;
+            reject("Error!");
+          }
+        };
 
-    socket.onclose = function(event) {
-      if (event.wasClean) {
-        // alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-        console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-      } else {
-        // e.g. server process killed or network down
-        // event.code is usually 1006 in this case
-        // alert('[close] Connection died');
-        console.log("[close] Connection died")
-      }
-    };
+        socket.onerror = function(error) {
+          // alert(`[error] ${error.message}`);
+          console.log(`[error] ${error.message}`);
+          waitForAnswer = false;
+          reject("Error!");
+        };
+    });
 
-    socket.onerror = function(error) {
-      // alert(`[error] ${error.message}`);
-      console.log(`[error] ${error.message}`);
-    };
 }
 
 
